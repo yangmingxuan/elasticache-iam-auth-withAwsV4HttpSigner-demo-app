@@ -3,8 +3,15 @@ name: Java CI with Maven
 on:
   push:
     branches: [ main ]
+    paths:
+      - 'java8/**'
+      - '.github/workflows/maven.yml'
   pull_request:
     branches: [ main ]
+    paths:
+      - 'java8/**'
+      - '.github/workflows/maven.yml'
+
 
 jobs:
   build:
@@ -20,4 +27,5 @@ jobs:
           distribution: 'corretto'
           cache: maven
       - name: Run Maven verify
+        working-directory: ./java8
         run: mvn --batch-mode verify

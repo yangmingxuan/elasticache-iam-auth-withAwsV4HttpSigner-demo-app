@@ -1,68 +1,20 @@
-# Elasticache IAM authentication demo application
+# AWS ElastiCache IAM Authentication Examples
 
-You can use this java-based application which uses the Redis Lettuce client to demo the IAM based Authentication to access your Elasticache for Redis cluster.
-We use a Redis credentials provider using the SigV4 IAM Auth token generation.
+This repository provides sample code demonstrating how to connect to **Amazon ElastiCache for Redis** and **Amazon ElastiCache for Valkey** clusters using **IAM Authentication**.
 
-NOTE: Make sure that The EC2 instance is in the same VPC as the ElastiCache cluster. Also this application works only with Elasticache for Redis version 7.0 or higher with TLS enabled.
+## Overview
 
-## Getting started with setting up the EC2 instance to run the Demo application.
+Amazon ElastiCache supports IAM authentication, providing enhanced security by eliminating the need to store Redis/Valkey passwords. This repository contains production-ready examples in multiple programming languages to help you quickly integrate IAM authentication into your applications.
 
-### Setup Java 8
+### ElastiCache Engines
+- **Amazon ElastiCache for Redis** (version 7.0+)
+- **Amazon ElastiCache for Valkey** (version 7.2+)
 
-To setup Java 8 on your instance, follow these instructions:
+### Programming Languages
+- **Java 8** - See [java8/README.md](java8/README.md)
+- **Python 3.10+** - See [python/README.md](python/README.md)
 
-Check which version of Java is installed, if any.
+## Prerequisites
+According to documentation [Authenticating with IAM for Elasticache](https://docs.aws.amazon.com/AmazonElastiCache/latest/dg/auth-iam.html) or [Authenticating with IAM for MemoryDB](https://docs.aws.amazon.com/memorydb/latest/devguide/auth-iam.html) , set up IAM user/role permission policies, create Elasticache/MemoryDB users(type=iam) for Redis/Valkey clusters, generate access strings, and complete other required steps.
 
-```$ java -version```
 
-if the appropriate version is not installed, then install Java 1.8
-
-```$ sudo yum install java-1.8.0```
-
-Change the Java version to 1.8 if you have multiple version of Java
-
-```$ sudo alternatives --config java```
-
-### Setup the demo Application
-
-Now git clone the repo locally onto the EC2 instance from where you want to connect to ElastiCache for Redis.
-
-```$ git clone https://github.com/aws-samples/elasticache-iam-auth-demo-app.git```
-
-```$ cd elasticache-iam-auth-demo-app```
-
-You can build the application from the source code using 
-
-```$ mvn clean verify```
-
-which generates a .jar file, which you can then use to run you java application.
-
-### To generate a token using the demo app use the following command
-```
-$ java -cp target/ElastiCacheIAMAuthDemoApp-1.0-SNAPSHOT.jar \
-	com.amazon.elasticache.IAMAuthTokenGeneratorApp \
-	--region us-east-1 \
-	--replication-group-id iam-test-rg-01 \
-	--user-id iam-test-user-01
-```
-
-### Now to connect to a cluster using the demo app
-
-The app uses the default [Default Credentials provider](https://sdk.amazonaws.com/java/api/latest/software/amazon/awssdk/auth/credentials/DefaultCredentialsProvider.html) to generate the IAM Auth token (signs the token) using your current AWS caller identity. As host you can configure the primary or reader endpoints, or configuration endpoint for cluster-mode enabled replication groups. If you setup your IAM role as EC2 instance profile, then the temporary credentials for the IAM role will be automatically managed for you. 
-
-NOTE:
-* your application needs to run in the same VPC as your ElastiCache replication group as well as security group to allow traffic between ElastiCache and EC2
-* replace the ```<host>``` with the cluster endpoint which you can fetch by looking into the cluster details section of your elasticache cluster. It could look something like ```elc-tutorial.lnvbt6.clustercfg.use1.cache.amazonaws.com```
-
-```
-$ java -jar target/ElastiCacheIAMAuthDemoApp-1.0-SNAPSHOT.jar \
-	--redis-host <host> \
-	--region us-east-1 \
-	--replication-group-id iam-test-rg-01 \
-	--user-id iam-test-user-01 \
-	--tls
-```
-
-For cluster-mode enabled replication groups, please add the `--cluster-mode` flag.
-
-The demo app creates a new connection to the host using the IAM user identity and generates an IAM authentication token.
