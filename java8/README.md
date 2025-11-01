@@ -27,9 +27,11 @@ Change the Java version to 1.8 if you have multiple version of Java
 
 Now git clone the repo locally onto the EC2 instance from where you want to connect to ElastiCache for Redis.
 
-```$ git clone https://github.com/aws-samples/elasticache-iam-auth-demo-app.git```
+```$ git clone --filter=blob:none --sparse https://github.com/aws-samples/sample-Elasticache-iam-authentication-python-demo-application.git elasticache-iam-auth-demo-app```
 
 ```$ cd elasticache-iam-auth-demo-app```
+```$ git sparse-checkout set java8```
+```$ cd java8```
 
 You can build the application from the source code using 
 
