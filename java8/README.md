@@ -30,7 +30,9 @@ Now git clone the repo locally onto the EC2 instance from where you want to conn
 ```$ git clone --filter=blob:none --sparse https://github.com/aws-samples/sample-Elasticache-iam-authentication-python-demo-application.git elasticache-iam-auth-demo-app```
 
 ```$ cd elasticache-iam-auth-demo-app```
+
 ```$ git sparse-checkout set java8```
+
 ```$ cd java8```
 
 You can build the application from the source code using 
